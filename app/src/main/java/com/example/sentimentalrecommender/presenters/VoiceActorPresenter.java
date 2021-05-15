@@ -1,7 +1,5 @@
 package com.example.sentimentalrecommender.presenters;
 
-import android.util.Log;
-
 import com.example.sentimentalrecommender.entities.Message;
 import com.example.sentimentalrecommender.views.VoiceActorView;
 
@@ -14,10 +12,18 @@ public class VoiceActorPresenter {
         baseView = view;
     }
 
+    public void loadMessages() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            baseView.showMessages(
+                    baseView.getMessageRepository().getAll()
+            );
+        });
+    }
+
     public void addMessage(Message message) {
         Executors.newSingleThreadExecutor().execute(() -> {
             baseView.getMessageRepository().insertAll(message);
-            Log.e("TAG", baseView.getMessageRepository().getAll().toString());
         });
+        baseView.addMessageToRecycler(message);
     }
 }

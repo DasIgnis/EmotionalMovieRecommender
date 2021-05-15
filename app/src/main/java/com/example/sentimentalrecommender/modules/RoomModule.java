@@ -19,7 +19,9 @@ public class RoomModule {
     private AppDatabase appDatabase;
 
     public RoomModule(Application application) {
-        this.appDatabase = Room.databaseBuilder(application, AppDatabase.class, "app-db").build();
+        this.appDatabase = Room.databaseBuilder(application, AppDatabase.class, "app-db")
+                .fallbackToDestructiveMigration() //TODO: remove it
+                .build();
     }
 
     @Singleton

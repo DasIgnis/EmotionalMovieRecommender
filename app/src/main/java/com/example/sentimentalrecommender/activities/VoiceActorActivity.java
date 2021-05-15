@@ -3,11 +3,11 @@ package com.example.sentimentalrecommender.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import com.example.sentimentalrecommender.R;
+import com.example.sentimentalrecommender.adapters.MessagesAdapter;
 import com.example.sentimentalrecommender.entities.Message;
 import com.example.sentimentalrecommender.entities.MessageRepository;
 import com.example.sentimentalrecommender.modules.AppModule;
@@ -19,6 +19,8 @@ import com.example.sentimentalrecommender.views.VoiceActorView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -27,22 +29,18 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 
 public class VoiceActorActivity extends AppCompatActivity implements RecognitionListener, VoiceActorView {
 
@@ -55,11 +53,16 @@ public class VoiceActorActivity extends AppCompatActivity implements Recognition
     private final int AUDIO_RECORD_REQUEST_CODE = 1;
     private boolean isListening = false;
 
+    private MessagesAdapter messagesAdapter;
+
     @BindView(R.id.recognized_text_container)
     EditText recognizedTextContainer;
 
     @BindView(R.id.stop_listening)
     ImageButton stopListeningButton;
+
+    @BindView(R.id.messages_recycler)
+    RecyclerView messagesRecycler;
 
     @Inject
     public MessageRepository messageRepository;
@@ -80,6 +83,15 @@ public class VoiceActorActivity extends AppCompatActivity implements Recognition
                 .inject(this);
 
         voiceActorPresenter.attachView(this);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        messagesRecycler.setLayoutManager(linearLayoutManager);
+
+        messagesAdapter = new MessagesAdapter();
+        messagesRecycler.setAdapter(messagesAdapter);
+
+        voiceActorPresenter.loadMessages();
 
         if(ContextCompat.checkSelfPermission(
                 VoiceActorActivity.this,
@@ -142,6 +154,14 @@ public class VoiceActorActivity extends AppCompatActivity implements Recognition
         }
     }
 
+    @OnClick(R.id.save_user_message)
+    public void onUserMessageSave() {
+        voiceActorPresenter.addMessage(
+                new Message(true, recognizedTextContainer.getText().toString())
+        );
+        recognizedTextContainer.setText("");
+    }
+
     @Override
     public void onResults(Bundle results) {
         ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -185,11 +205,15 @@ public class VoiceActorActivity extends AppCompatActivity implements Recognition
     @Override
     public void onEndOfSpeech() {
         Log.d("LISTENER", "onEnd ");
+        stopListeningButton.setImageResource(R.drawable.ic_baseline_mic_48);
     }
 
     @Override
     public void onError(int error) {
         Log.e("LISTENER", error + "");
+        speechRecognizer.cancel();
+        isListening = false;
+        stopListeningButton.setImageResource(R.drawable.ic_baseline_mic_48);
     }
 
     @Override
@@ -199,6 +223,11 @@ public class VoiceActorActivity extends AppCompatActivity implements Recognition
 
     @Override
     public void addMessageToRecycler(Message message) {
+        messagesAdapter.addMessage(message);
+    }
 
+    @Override
+    public void showMessages(List<Message> messages) {
+        messagesAdapter.setMessages(messages);
     }
 }

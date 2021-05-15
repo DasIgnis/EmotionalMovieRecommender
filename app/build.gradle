@@ -29,6 +29,7 @@ android {
 }
 
 dependencies {
+    implementation files('libs/paralleldots-1.0.3.jar')
     def room_version = "2.3.0"
 
     implementation "androidx.room:room-runtime:$room_version"

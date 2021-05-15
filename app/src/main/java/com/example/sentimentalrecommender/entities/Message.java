@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Message {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public long id;
 
     @ColumnInfo(name = "isUserMessage")
@@ -14,4 +14,9 @@ public class Message {
 
     @ColumnInfo(name = "content")
     public String content;
+
+    public Message(boolean isUserMessage, String content) {
+        this.isUserMessage = isUserMessage;
+        this.content = content;
+    }
 }
