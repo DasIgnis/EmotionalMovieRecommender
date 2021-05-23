@@ -21,12 +21,10 @@ public class Message {
     @ColumnInfo(name = "movie_url")
     public String movieUrl;
 
-    public Message(boolean isUserMessage, String content) {
+    public Message(boolean isUserMessage, String content, String imageUrl, String movieUrl) {
         this.isUserMessage = isUserMessage;
         this.content = content;
-    }
-
-    public Message(String content, String imageUrl, String movieUrl) {
-
+        this.imageUrl = imageUrl;
+        this.movieUrl = movieUrl;
     }
 }

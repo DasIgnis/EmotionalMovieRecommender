@@ -7,7 +7,7 @@ import com.example.sentimentalrecommender.entities.dao.MessageDao;
 
 @Database(entities = {Message.class}, version = AppDatabase.VERSION)
 public abstract class AppDatabase extends RoomDatabase {
-    static final int VERSION = 2;
+    static final int VERSION = 3;
 
     public abstract MessageDao messageDao();
 }

@@ -11,10 +11,24 @@
     android:layout_marginEnd="24dp"
     android:padding="8dp">
 
+    <ImageView
+        android:id="@+id/movie_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:maxHeight="150dp"
+        android:adjustViewBounds="true"/>
+
     <TextView
         android:id="@+id/message_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/movie_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"/>
 
 </LinearLayout>

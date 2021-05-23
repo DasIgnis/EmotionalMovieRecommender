@@ -9,6 +9,7 @@ import com.example.sentimentalrecommender.modules.ApiModule;
 import com.example.sentimentalrecommender.objects.Emotion;
 import com.example.sentimentalrecommender.objects.EmotionResponse;
 import com.example.sentimentalrecommender.objects.EmotionResponseItem;
+import com.example.sentimentalrecommender.objects.MovieResponse;
 import com.example.sentimentalrecommender.objects.TranslationResponse;
 import com.example.sentimentalrecommender.views.VoiceActorView;
 import com.google.gson.Gson;
@@ -33,7 +34,7 @@ public class VoiceActorPresenter {
             if (baseView.getMessageRepository().getAll().size() == 0) {
                 Message initialMessage = new Message(
                         false,
-                        Application.getAppContext().getString(R.string.welcome_message));
+                        Application.getAppContext().getString(R.string.welcome_message), "", "");
                 baseView.getMessageRepository().insertAll(initialMessage);
                 baseView.addMessageToRecycler(initialMessage);
             }
@@ -46,6 +47,7 @@ public class VoiceActorPresenter {
 
         Executors.newSingleThreadExecutor().execute(() -> {
             baseView.getMessageRepository().insertAll(message);
+            baseView.addMessageToRecycler(message);
             String content = message.content;
             if (!Locale.getDefault().getLanguage().equals("en")) {
                 String responseJSON = ApiModule.getTranslation(content, Locale.getDefault().getLanguage());
@@ -65,29 +67,34 @@ public class VoiceActorPresenter {
             Message botResponse;
             switch (mostValuable) {
                 case ANGRY:
-                    botResponse = new Message(false, Application.getAppContext().getString(R.string.angry_confirmation_message));
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.angry_confirmation_message), "", "");
                     break;
                 case SAD:
-                    botResponse = new Message(false, Application.getAppContext().getString(R.string.sad_confirmation_message));
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.sad_confirmation_message), "", "");
                     break;
                 case FEAR:
-                    botResponse = new Message(false, Application.getAppContext().getString(R.string.fear_confirmation_message));
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.fear_confirmation_message), "", "");
                     break;
                 case BORED:
-                    botResponse = new Message(false, Application.getAppContext().getString(R.string.bored_confirmation_message));
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.bored_confirmation_message), "", "");
                     break;
                 case HAPPY:
-                    botResponse = new Message(false, Application.getAppContext().getString(R.string.happy_confirmation_message));
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.happy_confirmation_message), "", "");
                     break;
                 default:
-                    botResponse = new Message(false, Application.getAppContext().getString(R.string.excited_confirmation_message));
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.excited_confirmation_message), "", "");
                     break;
             }
             baseView.addMessageToRecycler(botResponse);
             baseView.getMessageRepository().insertAll(botResponse);
 
-        });
+            String movieJSON = ApiModule.getMovie(emotionResponseItem);
+            MovieResponse movieResponse = gson.fromJson(movieJSON, MovieResponse.class);
+            Log.d("MOVIE", movieJSON);
 
-        baseView.addMessageToRecycler(message);
+            Message movieMessage = new Message(false, movieResponse.FilmName, "https://www.film.ru/sites/default/files/movies/posters/Lolita-2.jpg", movieResponse.FilmUrl);
+            baseView.addMessageToRecycler(movieMessage);
+            baseView.getMessageRepository().insertAll(movieMessage);
+        });
     }
 }

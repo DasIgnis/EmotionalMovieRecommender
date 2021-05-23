@@ -158,7 +158,7 @@ public class VoiceActorActivity extends AppCompatActivity implements Recognition
     @OnClick(R.id.save_user_message)
     public void onUserMessageSave() {
         voiceActorPresenter.addMessage(
-                new Message(true, recognizedTextContainer.getText().toString())
+                new Message(true, recognizedTextContainer.getText().toString(), "", "")
         );
         recognizedTextContainer.setText("");
     }
