@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Сентиментальный рекомендатель</string>
+    <string name="title_activity_voice_actor">Голосовой ассистент</string>
+    <string name="welcome_message">Чтобы пользоваться приложением, разрешите использование микрофона это приложению, а также приложению Google. После этого опишите фильм, который хотели бы посмотреть.</string>
+    <string name="angry_confirmation_message">Звучит довольно злобно. Попробую найти что-то под стать.</string>
+    <string name="sad_confirmation_message">Похоже, кто-то сегодня захотел погрустить! Кто я такой, чтобы спорить.</string>
+    <string name="fear_confirmation_message">Хочется чего-то страшного? Одну секунду!</string>
+    <string name="bored_confirmation_message">Не знаю, зачем смотреть скучное кино, но как скажете.</string>
+    <string name="happy_confirmation_message">Кажется, вы описываете что-то хорошее. Сейчас поищу.</string>
+    <string name="excited_confirmation_message">Звучит бодро. Поищу кино подстать.</string>
+</resources>

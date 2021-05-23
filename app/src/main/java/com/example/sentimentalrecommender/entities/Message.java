@@ -15,8 +15,18 @@ public class Message {
     @ColumnInfo(name = "content")
     public String content;
 
+    @ColumnInfo(name = "image_url")
+    public String imageUrl;
+
+    @ColumnInfo(name = "movie_url")
+    public String movieUrl;
+
     public Message(boolean isUserMessage, String content) {
         this.isUserMessage = isUserMessage;
         this.content = content;
+    }
+
+    public Message(String content, String imageUrl, String movieUrl) {
+
     }
 }

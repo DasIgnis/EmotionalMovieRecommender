@@ -1,5 +1,7 @@
 package com.example.sentimentalrecommender.views;
 
+import android.content.Context;
+
 import com.example.sentimentalrecommender.entities.Message;
 import com.example.sentimentalrecommender.entities.MessageRepository;
 

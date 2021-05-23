@@ -10,4 +10,11 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="tts_initialization_error">Error initializing TTS</string>
+    <string name="welcome_message">To use this app please allow micro usage to this app and Google app. After that describe the movie you want to watch.</string>
+    <string name="angry_confirmation_message">Sounds quite angry. I\'ll try to find something.</string>
+    <string name="fear_confirmation_message">Wanna something spooky? Just a sec!</string>
+    <string name="bored_confirmation_message">Not sure why you want to watch something this boring, but as you wish.</string>
+    <string name="happy_confirmation_message">Looks good. I\'ll find something like this.</string>
+    <string name="excited_confirmation_message">You\'re excited as hell! Got it.</string>
+    <string name="sad_confirmation_message">Someone decided to be sad now! Who am I to argue.</string>
 </resources>

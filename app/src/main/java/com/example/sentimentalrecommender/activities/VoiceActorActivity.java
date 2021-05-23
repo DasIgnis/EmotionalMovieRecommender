@@ -1,6 +1,7 @@
 package com.example.sentimentalrecommender.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -166,7 +167,6 @@ public class VoiceActorActivity extends AppCompatActivity implements Recognition
     public void onResults(Bundle results) {
         ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         recognizedTextContainer.setText(data.get(0));
-        textToSpeech.speak(data.get(0), TextToSpeech.QUEUE_ADD, null, Math.random() + "");
         Toast.makeText(VoiceActorActivity.this, "Finished", Toast.LENGTH_SHORT).show();
     }
 
@@ -223,11 +223,19 @@ public class VoiceActorActivity extends AppCompatActivity implements Recognition
 
     @Override
     public void addMessageToRecycler(Message message) {
-        messagesAdapter.addMessage(message);
+        runOnUiThread(() -> {
+            if (!message.isUserMessage) {
+                textToSpeech.speak(message.content, TextToSpeech.QUEUE_ADD, null, Math.random() + "");
+            }
+            messagesAdapter.addMessage(message);
+            messagesRecycler.scrollToPosition(messagesAdapter.getItemCount() - 1);
+        });
     }
 
     @Override
     public void showMessages(List<Message> messages) {
-        messagesAdapter.setMessages(messages);
+        runOnUiThread(() -> {
+            messagesAdapter.setMessages(messages);
+        });
     }
 }

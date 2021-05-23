@@ -2,9 +2,13 @@ package com.example.sentimentalrecommender.presenters;
 
 import android.util.Log;
 
+import com.example.sentimentalrecommender.Application;
+import com.example.sentimentalrecommender.R;
 import com.example.sentimentalrecommender.entities.Message;
 import com.example.sentimentalrecommender.modules.ApiModule;
+import com.example.sentimentalrecommender.objects.Emotion;
 import com.example.sentimentalrecommender.objects.EmotionResponse;
+import com.example.sentimentalrecommender.objects.EmotionResponseItem;
 import com.example.sentimentalrecommender.objects.TranslationResponse;
 import com.example.sentimentalrecommender.views.VoiceActorView;
 import com.google.gson.Gson;
@@ -25,6 +29,14 @@ public class VoiceActorPresenter {
             baseView.showMessages(
                     baseView.getMessageRepository().getAll()
             );
+
+            if (baseView.getMessageRepository().getAll().size() == 0) {
+                Message initialMessage = new Message(
+                        false,
+                        Application.getAppContext().getString(R.string.welcome_message));
+                baseView.getMessageRepository().insertAll(initialMessage);
+                baseView.addMessageToRecycler(initialMessage);
+            }
         });
     }
 
@@ -47,9 +59,35 @@ public class VoiceActorPresenter {
             String emotionJSON = ApiModule.getEmotion(content);
             Log.d("EMOTION", emotionJSON);
 
-            EmotionResponse emotionResponse = gson.fromJson(emotionJSON, EmotionResponse.class);
+            EmotionResponseItem emotionResponseItem = gson.fromJson(emotionJSON, EmotionResponse.class).emotion;
+
+            Emotion mostValuable = emotionResponseItem.getMostValuable();
+            Message botResponse;
+            switch (mostValuable) {
+                case ANGRY:
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.angry_confirmation_message));
+                    break;
+                case SAD:
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.sad_confirmation_message));
+                    break;
+                case FEAR:
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.fear_confirmation_message));
+                    break;
+                case BORED:
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.bored_confirmation_message));
+                    break;
+                case HAPPY:
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.happy_confirmation_message));
+                    break;
+                default:
+                    botResponse = new Message(false, Application.getAppContext().getString(R.string.excited_confirmation_message));
+                    break;
+            }
+            baseView.addMessageToRecycler(botResponse);
+            baseView.getMessageRepository().insertAll(botResponse);
 
         });
+
         baseView.addMessageToRecycler(message);
     }
 }

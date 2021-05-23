@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,9 +29,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        @LayoutRes int layout = viewType == 0
+            ? R.layout.user_message_view_holder
+            : R.layout.bot_message_view_holder;
+
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.user_message_view_holder, parent, false);
+                .inflate(layout, parent, false);
 
         return new UsersMessageViewHolder(view);
     }
@@ -45,6 +50,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return messages.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return messages.get(position).isUserMessage ? 0 : 1;
     }
 
     public void setMessages(List<Message> messages) {
