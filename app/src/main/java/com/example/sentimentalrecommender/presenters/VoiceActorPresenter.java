@@ -92,7 +92,7 @@ public class VoiceActorPresenter {
             MovieResponse movieResponse = gson.fromJson(movieJSON, MovieResponse.class);
             Log.d("MOVIE", movieJSON);
 
-            Message movieMessage = new Message(false, movieResponse.FilmName, "https://www.film.ru/sites/default/files/movies/posters/Lolita-2.jpg", movieResponse.FilmUrl);
+            Message movieMessage = new Message(false, movieResponse.FilmName, movieResponse.PosterUrl, movieResponse.FilmUrl);
             baseView.addMessageToRecycler(movieMessage);
             baseView.getMessageRepository().insertAll(movieMessage);
         });
